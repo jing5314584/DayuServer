@@ -2,8 +2,10 @@ package com.dayu.server.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dayu.server.mbg.mapper.UserMapper;
+import com.dayu.server.mbg.mapper.UserOauthMapper;
 import com.dayu.server.mbg.model.User;
 import com.dayu.server.mbg.model.UserExample;
+import com.dayu.server.mbg.model.UserOauth;
 import com.dayu.server.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private UserOauthMapper userOauthMapper;
     @Override
     public List<User> listUser(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -27,10 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public  User insertUser(JSONObject rawDataJson, String openid, String sessionKey){
-        User user = userMapper.selectByPrimaryKey(openid);
-        // uuid生成唯一key，用于维护微信小程序用户与服务端的会话
-        String skey = UUID.randomUUID().toString();
-        if (user == null) {
+        UserOauth userOauth = userOauthMapper.selectByPrimaryKey(openid);
+        if (userOauth == null){
             // 用户信息入库
             String nickName = rawDataJson.getString("nickName");
             String avatarUrl = rawDataJson.getString("avatarUrl");
@@ -38,28 +39,23 @@ public class UserServiceImpl implements UserService {
             String city = rawDataJson.getString("city");
             String country = rawDataJson.getString("country");
             String province = rawDataJson.getString("province");
-
-            user = new User();
-            user.setOpenId(openid);
-            user.setSkey(skey);
-            user.setCreateTime(new Date());
-            user.setLastVisitTime(new Date());
-            user.setSessionKey(sessionKey);
-            user.setCity(city);
-            user.setProvince(province);
-            user.setCountry(country);
-            user.setAvatarUrl(avatarUrl);
-            user.setGender((byte) Integer.parseInt(gender));
-            user.setNickName(nickName);
-            userMapper.insert(user);
-
-        } else {
+            userOauth.setOpenId(openid);
+            userOauth.setCreateTime(new Date());
+            userOauth.setLastVisitTime(new Date());
+            userOauth.setSessionKey(sessionKey);
+            userOauth.setCity(city);
+            userOauth.setProvince(province);
+            userOauth.setCountry(country);
+            userOauth.setAvatarUrl(avatarUrl);
+            userOauth.setGender((byte) Integer.parseInt(gender));
+            userOauth.setNickName(nickName);
+            userOauthMapper.insert(userOauth);
+        }else {
             // 已存在，更新用户登录时间
-            user.setLastVisitTime(new Date());
-            // 重新设置会话skey
-            user.setSkey(skey);
-            this.userMapper.updateByPrimaryKey(user);
+            userOauth.setLastVisitTime(new Date());
+            this.userOauthMapper.updateByPrimaryKey(userOauth);
         }
+        User user = userMapper.selectByPrimaryKey(userOauth.getUserIdx());
         return user;
     }
 }

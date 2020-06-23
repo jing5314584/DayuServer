@@ -1,0 +1,144 @@
+package com.dayu.server.mbg.model;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class V_User implements Serializable {
+    private Integer idx;
+
+    private Integer fishCoin;
+
+    private Date createTime;
+
+    private Date lastVisitTime;
+
+    private String sessionKey;
+
+    private String city;
+
+    private String province;
+
+    private String country;
+
+    private String avatarUrl;
+
+    private Byte gender;
+
+    private String nickName;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getIdx() {
+        return idx;
+    }
+
+    public void setIdx(Integer idx) {
+        this.idx = idx;
+    }
+
+    public Integer getFishCoin() {
+        return fishCoin;
+    }
+
+    public void setFishCoin(Integer fishCoin) {
+        this.fishCoin = fishCoin;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Date getLastVisitTime() {
+        return lastVisitTime;
+    }
+
+    public void setLastVisitTime(Date lastVisitTime) {
+        this.lastVisitTime = lastVisitTime;
+    }
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey == null ? null : sessionKey.trim();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country == null ? null : country.trim();
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
+    }
+
+    public Byte getGender() {
+        return gender;
+    }
+
+    public void setGender(Byte gender) {
+        this.gender = gender;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName == null ? null : nickName.trim();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", idx=").append(idx);
+        sb.append(", fishCoin=").append(fishCoin);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", lastVisitTime=").append(lastVisitTime);
+        sb.append(", sessionKey=").append(sessionKey);
+        sb.append(", city=").append(city);
+        sb.append(", province=").append(province);
+        sb.append(", country=").append(country);
+        sb.append(", avatarUrl=").append(avatarUrl);
+        sb.append(", gender=").append(gender);
+        sb.append(", nickName=").append(nickName);
+        sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append("]");
+        return sb.toString();
+    }
+}

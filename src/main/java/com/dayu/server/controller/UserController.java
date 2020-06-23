@@ -57,9 +57,9 @@ public class UserController {
         // 5.根据返回的User实体类，判断用户是否是新用户，是的话，将用户信息存到数据库；不是的话，更新最新登录时间
         User user = userService.insertUser(rawDataJson,openid,sessionKey);
         //encrypteData比rowData多了appid和openid
-        //JSONObject userInfo = WechatUtil.getUserInfo(encrypteData, sessionKey, iv);
+       // JSONObject userInfo = WechatUtil.getUserInfo(encrypteData, sessionKey, iv);
         //6. 把新的skey返回给小程序
 
-        return CommonResult.success(user.getSkey());
+        return CommonResult.success(user);
     }
 }

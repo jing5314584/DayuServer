@@ -2,13 +2,16 @@ package com.dayu.server.mbg;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.CompilationUnit;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.DefaultCommentGenerator;
 import org.mybatis.generator.internal.util.StringUtility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * 自定义注释生成器
@@ -18,7 +21,14 @@ public class CommentGenerator extends DefaultCommentGenerator {
     private boolean addRemarkComments = false;
     private static final String EXAMPLE_SUFFIX="Example";
     private static final String API_MODEL_PROPERTY_FULL_CLASS_NAME="io.swagger.annotations.ApiModelProperty";
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Override
+    public void addClassAnnotation(InnerClass innerClass, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> imports)
+    {
+        super.addClassAnnotation(innerClass,introspectedTable,imports);
+        imports.add(new FullyQualifiedJavaType("com.fasterxml.jackson.annotation.JsonFormat"));
+    }
     /**
      * 设置用户配置的参数
      */
@@ -27,24 +37,41 @@ public class CommentGenerator extends DefaultCommentGenerator {
         super.addConfigurationProperties(properties);
         this.addRemarkComments = StringUtility.isTrue(properties.getProperty("addRemarkComments"));
     }
+    @Override
+    public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
+        super.addGetterComment(method, introspectedTable, introspectedColumn);
+        //String remarks = introspectedColumn.getRemarks();
+        //if (addRemarkComments&&StringUtility.stringHasValue(remarks))
+        //{
+        //    if(remarks.contains("\"")){
+        //        remarks = remarks.replace("\"","'");
+        //    }
+        //}
 
+        if (method.getName().contains("Time")){
+            method.addJavaDocLine("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\", timezone = \"GMT+8\")");
+           // logger.info( "type:"+method.getReturnType().get().toString());
+          //  logger.info( "type:"+method.getReturnType().toString());
+        }
+        //
+    }
     /**
      * 给字段添加注释
      */
     @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable,
                                 IntrospectedColumn introspectedColumn) {
-        String remarks = introspectedColumn.getRemarks();
-        //根据参数和备注信息判断是否添加备注信息
-        if(addRemarkComments&&StringUtility.stringHasValue(remarks)){
-//            addFieldJavaDoc(field, remarks);
-            //数据库中特殊字符需要转义
-            if(remarks.contains("\"")){
-                remarks = remarks.replace("\"","'");
-            }
-            //给model的字段添加swagger注解
-            field.addJavaDocLine("@ApiModelProperty(value = \""+remarks+"\")");
-        }
+        //String remarks = introspectedColumn.getRemarks();
+        ////根据参数和备注信息判断是否添加备注信息
+        //if(addRemarkComments&&StringUtility.stringHasValue(remarks)){
+//      //      addFieldJavaDoc(field, remarks);
+        //    //数据库中特殊字符需要转义
+        //    if(remarks.contains("\"")){
+        //        remarks = remarks.replace("\"","'");
+        //    }
+        //    //给model的字段添加swagger注解
+        //    field.addJavaDocLine("@ApiModelProperty(value = \""+remarks+"\")");
+        //}
     }
 
     /**
