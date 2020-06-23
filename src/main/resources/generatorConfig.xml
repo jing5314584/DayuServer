@@ -51,9 +51,12 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
         <!--生成全部表tableName设为%-->
-        <table tableName="v_user_fishcoin_log" domainObjectName="V_UserFishcoinLog"
+        <table tableName="d_brand" domainObjectName="Brand"
                enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true"></table>
+        <!--<table tableName="v_user_fishcoin_log" domainObjectName="V_UserFishcoinLog"
+               enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
         <!--<table tableName="v_user" domainObjectName="V_User"
                enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true"></table>
